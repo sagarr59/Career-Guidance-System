@@ -1,0 +1,135 @@
+/* Custom styles for Career Guidance System */
+
+/* Interest Survey Styles */
+.interest-container {
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+.interest-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    border-left: 5px solid #3498db;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.interest-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-left-color: #27ae60;
+}
+
+.interest-card.selected {
+    border-left-color: #27ae60;
+    background: #ebf5fb;
+}
+
+.interest-icon {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #3498db;
+}
+
+.interest-card.selected .interest-icon {
+    color: #27ae60;
+}
+
+.interest-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.interest-desc {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+}
+
+.check-mark {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: #27ae60;
+    font-size: 1.5rem;
+    display: none;
+}
+
+.interest-card.selected .check-mark {
+    display: block;
+}
+
+/* Assessment Progress Styles */
+.progress-sticky {
+    position: sticky;
+    top: 80px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    z-index: 10;
+}
+
+.progress-bar-custom {
+    height: 12px;
+    background: #ecf0f1;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #3498db;
+    transition: width 0.4s ease;
+    border-radius: 10px;
+}
+
+.page-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.page-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #bdc3c7;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.page-dot.active {
+    background: #3498db;
+    width: 30px;
+    border-radius: 6px;
+}
+
+.page-dot.completed {
+    background: #27ae60;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .interest-card {
+        padding: 20px;
+    }
+    
+    .interest-icon {
+        font-size: 1.5rem;
+    }
+    
+    .interest-title {
+        font-size: 1.1rem;
+    }
+    
+    .interest-desc {
+        font-size: 0.9rem;
+    }
+}
