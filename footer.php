@@ -3,15 +3,17 @@
     <div class="row">
       <div class="col-md-4 mb-3 mb-md-0">
         <h5 class="fw-bold mb-3">Career Guidance System</h5>
-        <p class="mb-0" style="font-size: 0.9rem; opacity: 0.9;">Helping students in Nepal discover their perfect career path through personalized guidance and expert insights.</p>
+        <!-- Added catchy line below Career Guidance System as requested -->
+        <p class="mb-0" style="font-size: 0.9rem; opacity: 0.9;">Your journey to the perfect career starts here</p>
       </div>
       <div class="col-md-4 mb-3 mb-md-0">
         <h5 class="fw-bold mb-3">Quick Links</h5>
-        <ul class="list-unstyled" style="font-size: 0.9rem; text-align: left;">
-          <li class="mb-2"><a href="index.php" class="text-white text-decoration-none"><i class="fas fa-home me-2"></i>Home</a></li>
-          <li class="mb-2"><a href="login.php" class="text-white text-decoration-none"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
-          <li class="mb-2"><a href="register.php" class="text-white text-decoration-none"><i class="fas fa-user-plus me-2"></i>Register</a></li>
-        </ul>
+        <!-- Changed quick links to horizontal layout like social links -->
+        <div class="d-flex justify-content-center">
+          <a href="index.php" class="text-white mx-2" style="display: inline-block; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><i class="fas fa-home"></i></a>
+          <a href="login.php" class="text-white mx-2" style="display: inline-block; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><i class="fas fa-sign-in-alt"></i></a>
+          <a href="register.php" class="text-white mx-2" style="display: inline-block; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><i class="fas fa-user-plus"></i></a>
+        </div>
       </div>
       <div class="col-md-4">
         <h5 class="fw-bold mb-3">Connect With Us</h5>
@@ -20,13 +22,15 @@
           <a href="#" class="text-white mx-2" style="display: inline-block; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><i class="fab fa-twitter"></i></a>
           <a href="#" class="text-white mx-2" style="display: inline-block; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;"><i class="fab fa-linkedin-in"></i></a>
         </div>
-        <p class="mb-0" style="font-size: 0.9rem; opacity: 0.9;">&copy; <?= date('Y') ?> Career Guidance System</p>
-        <p class="mb-0" style="font-size: 0.8rem; opacity: 0.7;">Made for Students in Nepal</p>
       </div>
     </div>
     <hr style="background: rgba(255,255,255,0.1); margin: 20px 0;">
     <div class="text-center" style="font-size: 0.8rem; opacity: 0.8;">
-      <p class="mb-0">Designed with care to help you find your perfect career path</p>
+      <!-- Removed "Designed with care" text as requested -->
+    </div>
+    <!-- Moved copyright to center bottom as requested -->
+    <div class="text-center mt-3" style="font-size: 0.9rem; opacity: 0.9;">
+      <p class="mb-0">&copy; <?= date('Y') ?> Career Guidance System</p>
     </div>
   </div>
 </footer>

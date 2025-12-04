@@ -1,6 +1,16 @@
 // Function to get node color based on type
 function getNodeColor(type) {
     switch(type) {
+        case 'education': return '#3498db'; // Blue
+        case 'skill': return '#27ae60';     // Green
+        case 'career': return '#e74c3c';    // Red
+        default: return '#95a5a6';
+    }
+}
+
+// Function to get simple node color (without gradients)
+function getSimpleNodeColor(type) {
+    switch(type) {
         case 'education': return '#3498db';
         case 'skill': return '#27ae60';
         case 'career': return '#e74c3c';
@@ -8,59 +18,14 @@ function getNodeColor(type) {
     }
 }
 
-// Function to get enhanced node color with gradient effect
-function getEnhancedNodeColor(type) {
-    switch(type) {
-        case 'education': return {
-            background: 'radial-gradient(circle, #3498db, #1a5276)',
-            border: '#1a5276',
-            highlight: {
-                background: 'radial-gradient(circle, #5dade2, #21618c)',
-                border: '#21618c'
-            }
-        };
-        case 'skill': return {
-            background: 'radial-gradient(circle, #27ae60, #145214)',
-            border: '#145214',
-            highlight: {
-                background: 'radial-gradient(circle, #58d68d, #186a3b)',
-                border: '#186a3b'
-            }
-        };
-        case 'career': return {
-            background: 'radial-gradient(circle, #e74c3c, #922b21)',
-            border: '#922b21',
-            highlight: {
-                background: 'radial-gradient(circle, #ec7063, #a93226)',
-                border: '#a93226'
-            }
-        };
-        default: return {
-            background: 'radial-gradient(circle, #95a5a6, #566573)',
-            border: '#566573',
-            highlight: {
-                background: 'radial-gradient(circle, #bac3c5, #626567)',
-                border: '#626567'
-            }
-        };
-    }
-}
-
-// Function to get node shape based on type
+// Function to get node shape based on type - with diamond shape for careers
 function getNodeShape(type) {
     switch(type) {
-        case 'education': return 'database';
-        case 'skill': return 'ellipse';
-        case 'career': return 'box';
-        default: return 'circle';
+        case 'education': return 'database'; // Cylinder shape for education
+        case 'skill': return 'circle';       // Circle for skills
+        case 'career': return 'diamond';     // Diamond for careers
+        default: return 'ellipse';
     }
-}
-
-// Function to get node title based on type
-function getNodeTitle(label, type) {
-    var title = '<div style="font-size: 14px; font-weight: bold; color: #000;">' + label + '</div>';
-    title += '<div style="color: #000;">Type: ' + type.charAt(0).toUpperCase() + type.slice(1) + '</div>';
-    return title;
 }
 
 // Initialize network visualizations when the page loads
@@ -74,31 +39,39 @@ document.addEventListener('DOMContentLoaded', function() {
             var allNodes = new vis.DataSet([]);
             var allEdges = new vis.DataSet([]);
             
-            // Add all nodes
+            // Add all nodes with proper shapes and uniform sizing
             for (var nodeId in graph.nodes) {
                 if (graph.nodes.hasOwnProperty(nodeId)) {
                     var node = graph.nodes[nodeId];
+                    
                     allNodes.add({
                         id: nodeId,
-                        label: node.name,
-                        title: getNodeTitle(node.name, node.type),
-                        color: getEnhancedNodeColor(node.type),
+                        label: node.name, // Show label on node
+                        title: node.name + '\n(' + node.type.charAt(0).toUpperCase() + node.type.slice(1) + ')',
+                        color: {
+                            background: getSimpleNodeColor(node.type),
+                            border: '#000000',
+                            highlight: {
+                                background: getSimpleNodeColor(node.type),
+                                border: '#000000'
+                            }
+                        },
                         shape: getNodeShape(node.type),
                         font: { 
-                            color: '#000', 
-                            size: 14, 
+                            color: '#000000', // Black text for all nodes
+                            size: 12, // Show internal labels with smaller font for fitting
                             face: 'Segoe UI, Arial, sans-serif',
-                            strokeWidth: 2,
-                            strokeColor: '#fff'
+                            strokeWidth: 0,
+                            multi: 'html' // Allow multi-line text
                         },
                         borderWidth: 2,
-                        size: 30,
-                        shadow: {
-                            enabled: true,
-                            color: 'rgba(0,0,0,0.2)',
-                            size: 6,
-                            x: 2,
-                            y: 2
+                        size: 30, // Uniform size for all nodes
+                        labelHighlightBold: true,
+                        chosen: {
+                            node: function(values, id, selected, hovering) {
+                                // Custom function to ensure labels stay inside nodes
+                                values.label = values.label || '';
+                            }
                         }
                     });
                 }
@@ -120,54 +93,38 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     },
                     color: { 
-                        color: 'rgba(52, 152, 219, 0.4)',
-                        highlight: 'rgba(41, 128, 185, 0.8)'
+                        color: 'rgba(52, 152, 219, 0.7)',
+                        highlight: 'rgba(41, 128, 185, 1)'
                     },
                     width: 2,
-                    title: '<div style="font-size: 14px; font-weight: bold; color: #2c3e50; padding: 3px;">Transition</div><div style="color: #34495e; padding: 2px;">From: ' + fromNode.name + '</div><div style="color: #34495e; padding: 2px;">To: ' + toNode.name + '</div>',
+                    title: fromNode.name + ' → ' + toNode.name,
                     font: { 
-                        color: '#2c3e50', 
+                        color: '#000000', // Black text for all edges
                         size: 12, 
-                        face: 'Segoe UI, Arial, sans-serif',
-                        strokeWidth: 1,
-                        strokeColor: '#fff'
+                        face: 'Segoe UI, Arial, sans-serif'
                     },
-                    smooth: { type: 'dynamic' },
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(52, 152, 219, 0.2)',
-                        size: 3,
-                        x: 1,
-                        y: 1
-                    }
+                    smooth: false
                 });
             }
             
-            // Network options for full network
+            // Network options for full network - Enhanced layout to prevent overlapping
             var fullOptions = {
                 nodes: {
-                    shape: 'dot',
+                    shape: 'diamond',
                     size: 30,
                     font: {
-                        size: 14,
+                        color: '#000000', // Black text for all nodes
+                        size: 12, // Show internal labels
                         face: 'Segoe UI, Arial, sans-serif',
-                        color: '#000',
-                        bold: true,
-                        strokeWidth: 2,
-                        strokeColor: '#fff'
+                        strokeWidth: 0,
+                        multi: 'html' // Allow multi-line text
                     },
                     borderWidth: 2,
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(0,0,0,0.3)',
-                        size: 8,
-                        x: 3,
-                        y: 3
-                    },
                     scaling: {
                         min: 15,
                         max: 40
-                    }
+                    },
+                    labelHighlightBold: true
                 },
                 edges: {
                     width: 2,
@@ -178,35 +135,29 @@ document.addEventListener('DOMContentLoaded', function() {
                             type: 'arrow'
                         }
                     },
-                    smooth: {
-                        type: 'dynamic'
-                    },
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(0,0,0,0.2)',
-                        size: 4,
-                        x: 1,
-                        y: 1
-                    },
+                    smooth: false,
                     color: {
-                        color: 'rgba(52, 152, 219, 0.4)',
-                        highlight: 'rgba(41, 128, 185, 0.8)'
+                        color: 'rgba(52, 152, 219, 0.7)',
+                        highlight: 'rgba(41, 128, 185, 1)'
+                    },
+                    font: {
+                        color: '#000000' // Black text for all edges
                     }
                 },
                 physics: {
                     enabled: true,
                     stabilization: {
-                        iterations: 1500,
+                        iterations: 2000, // More iterations for better layout
                         fit: true
                     },
                     repulsion: {
-                        nodeDistance: 180,
-                        centralGravity: 0.2,
-                        springLength: 180,
-                        springConstant: 0.05
+                        nodeDistance: 150, // Increased distance to prevent overlapping
+                        centralGravity: 0.1,
+                        springLength: 200,
+                        springConstant: 0.01
                     },
                     solver: 'repulsion',
-                    timestep: 0.5,
+                    timestep: 0.1, // Slower physics for smoother stabilization
                     adaptiveTimestep: true
                 },
                 interaction: {
@@ -216,29 +167,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     keyboard: true,
                     multiselect: true,
                     hoverConnectedEdges: true,
-                    selectConnectedEdges: true
+                    selectConnectedEdges: true,
+                    dragNodes: true // Enable dragging
                 },
                 layout: {
                     improvedLayout: true,
                     hierarchical: {
-                        enabled: true,
-                        direction: 'LR',
-                        sortMethod: 'directed',
-                        nodeSpacing: 200,
-                        treeSpacing: 300,
-                        blockShifting: true,
-                        edgeMinimization: true,
-                        parentCentralization: true
+                        enabled: false
                     }
                 },
                 animation: {
-                    duration: 500,
+                    duration: 1000, // Smooth animations
                     easingFunction: 'easeInOutQuad'
                 }
             };
             
             // Create network for full career graph
             var fullContainer = document.getElementById('fullNetwork');
+            var fullNetwork;
             if (fullContainer) {
                 console.log('Creating full network with data:', { nodes: allNodes, edges: allEdges });
                 console.log('Full network options:', fullOptions);
@@ -246,7 +192,66 @@ document.addEventListener('DOMContentLoaded', function() {
                     nodes: allNodes,
                     edges: allEdges
                 };
-                var fullNetwork = new vis.Network(fullContainer, fullData, fullOptions);
+                fullNetwork = new vis.Network(fullContainer, fullData, fullOptions);
+                
+                // Disable physics after stabilization to prevent movement but keep dragging
+                fullNetwork.once("stabilizationIterationsDone", function() {
+                    fullNetwork.setOptions({ 
+                        physics: false,
+                        interaction: {
+                            dragNodes: true // Keep dragging enabled
+                        }
+                    });
+                });
+                
+                // Add smooth hover animations
+                fullNetwork.on("hoverNode", function (params) {
+                    // Scale up node on hover with animation
+                    fullNetwork.body.data.nodes.update({
+                        id: params.node,
+                        size: 40
+                    });
+                });
+                
+                fullNetwork.on("blurNode", function (params) {
+                    // Return to normal size when not hovering
+                    fullNetwork.body.data.nodes.update({
+                        id: params.node,
+                        size: 30
+                    });
+                });
+                
+                // Add coordinated movement when dragging nodes
+                fullNetwork.on("dragStart", function (params) {
+                    // When dragging starts, enable physics temporarily for coordinated movement
+                    fullNetwork.setOptions({
+                        physics: {
+                            enabled: true,
+                            stabilization: {
+                                iterations: 100
+                            },
+                            repulsion: {
+                                nodeDistance: 150,
+                                centralGravity: 0.1,
+                                springLength: 200,
+                                springConstant: 0.01
+                            },
+                            solver: 'repulsion'
+                        }
+                    });
+                });
+                
+                fullNetwork.on("dragEnd", function (params) {
+                    // When dragging ends, disable physics again
+                    setTimeout(function() {
+                        fullNetwork.setOptions({
+                            physics: {
+                                enabled: false
+                            }
+                        });
+                    }, 500);
+                });
+                
                 console.log('Full network created successfully');
             }
         }
@@ -255,45 +260,50 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeof pathResult !== 'undefined' && pathResult !== null && typeof graph !== 'undefined' && graph !== null) {
             console.log('Path result data:', pathResult);
             console.log('Graph data:', graph);
+            
             // Create nodes for optimal path
             var pathNodes = new vis.DataSet([]);
             var pathEdges = new vis.DataSet([]);
             
-            // Populate path nodes
+            // Populate path nodes with proper shapes and uniform sizing
             for (var i = 0; i < pathResult.path.length; i++) {
                 var nodeId = pathResult.path[i];
                 var node = graph.nodes[nodeId];
+                
                 pathNodes.add({
                     id: nodeId,
-                    label: node.name,
-                    title: getNodeTitle(node.name, node.type),
-                    color: getEnhancedNodeColor(node.type),
+                    label: node.name, // Show label on node
+                    title: node.name + '\n(' + node.type.charAt(0).toUpperCase() + node.type.slice(1) + ')',
+                    color: {
+                        background: getSimpleNodeColor(node.type),
+                        border: '#000000',
+                        highlight: {
+                            background: getSimpleNodeColor(node.type),
+                            border: '#000000'
+                        }
+                    },
                     shape: getNodeShape(node.type),
                     font: { 
-                        color: '#000', 
-                        size: 18, 
-                        face: 'Segoe UI, Arial, sans-serif', 
+                        color: '#000000', // Black text for all nodes
+                        size: 14, // Show internal labels with slightly larger font
+                        face: 'Segoe UI, Arial, sans-serif',
                         bold: true,
-                        strokeWidth: 3,
-                        strokeColor: '#fff'
+                        strokeWidth: 0,
+                        multi: 'html' // Allow multi-line text
                     },
-                    borderWidth: 4,
-                    size: 45,
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(0,0,0,0.5)',
-                        size: 15,
-                        x: 5,
-                        y: 5
-                    },
-                    scaling: {
-                        min: 20,
-                        max: 60
+                    borderWidth: 3,
+                    size: 45, // Uniform size for all path nodes
+                    labelHighlightBold: true,
+                    chosen: {
+                        node: function(values, id, selected, hovering) {
+                            // Custom function to ensure labels stay inside nodes
+                            values.label = values.label || '';
+                        }
                     }
                 });
             }
             
-            // Populate path edges
+            // Populate path edges with highlighting
             for (var i = 0; i < pathResult.path.length - 1; i++) {
                 var from = pathResult.path[i];
                 var to = pathResult.path[i + 1];
@@ -313,108 +323,76 @@ document.addEventListener('DOMContentLoaded', function() {
                         to: {
                             enabled: true,
                             type: 'arrow',
-                            scaleFactor: 1.5
+                            scaleFactor: 1.2
                         }
                     },
                     color: { 
-                        color: 'rgba(231, 76, 60, 0.8)', 
-                        highlight: 'rgba(192, 57, 43, 1)',
-                        opacity: 0.8
+                        color: 'rgba(231, 76, 60, 1)', // Solid red for path edges
+                        highlight: 'rgba(192, 57, 43, 1)'
                     },
-                    width: 6,
-                    title: '<div style="font-size: 16px; font-weight: bold; color: #2c3e50; padding: 5px;">Transition</div><div style="color: #34495e; padding: 3px;">From: ' + fromNode.name + '</div><div style="color: #34495e; padding: 3px;">To: ' + toNode.name + '</div><div style="color: #e74c3c; font-weight: bold; padding: 3px;">Effort: ' + transitionEffort + '</div>',
+                    width: 4,
+                    title: fromNode.name + ' → ' + toNode.name + ' (Effort: ' + transitionEffort + ')',
                     font: { 
-                        color: '#2c3e50', 
-                        size: 16, 
-                        face: 'Segoe UI, Arial, sans-serif',
-                        strokeWidth: 2,
-                        strokeColor: '#fff'
+                        color: '#000000', // Black text for all edges
+                        size: 14, 
+                        face: 'Segoe UI, Arial, sans-serif'
                     },
-                    smooth: { 
-                        type: 'dynamic',
-                        roundness: 0.5
-                    },
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(231, 76, 60, 0.3)',
-                        size: 8,
-                        x: 2,
-                        y: 2
-                    }
+                    smooth: false
                 });
             }
             
-            // Network options for path visualization
+            // Network options for path visualization - Enhanced layout to prevent overlapping
             var pathOptions = {
                 nodes: {
-                    shape: 'dot',
+                    shape: 'diamond',
                     size: 45,
                     font: {
-                        size: 18,
+                        color: '#000000', // Black text for all nodes
+                        size: 14, // Show internal labels
                         face: 'Segoe UI, Arial, sans-serif',
-                        color: '#000',
                         bold: true,
-                        strokeWidth: 3,
-                        strokeColor: '#fff'
+                        strokeWidth: 0,
+                        multi: 'html' // Allow multi-line text
                     },
-                    borderWidth: 4,
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(0,0,0,0.5)',
-                        size: 15,
-                        x: 5,
-                        y: 5
-                    },
+                    borderWidth: 3,
                     scaling: {
                         min: 20,
                         max: 60
                     },
-                    animation: {
-                        scale: 1.2,
-                        duration: 300
-                    }
+                    labelHighlightBold: true
                 },
                 edges: {
-                    width: 6,
+                    width: 4,
                     arrows: {
                         to: { 
                             enabled: true, 
-                            scaleFactor: 1.5,
+                            scaleFactor: 1.2,
                             type: 'arrow'
                         }
                     },
-                    smooth: {
-                        type: 'dynamic',
-                        roundness: 0.5
-                    },
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(0,0,0,0.3)',
-                        size: 8,
-                        x: 2,
-                        y: 2
-                    },
+                    smooth: false,
                     color: {
-                        color: 'rgba(231, 76, 60, 0.8)',
-                        highlight: 'rgba(192, 57, 43, 1)',
-                        opacity: 0.8
+                        color: 'rgba(231, 76, 60, 1)', // Solid red
+                        highlight: 'rgba(192, 57, 43, 1)'
+                    },
+                    font: {
+                        color: '#000000' // Black text for all edges
                     }
                 },
                 physics: {
                     enabled: true,
                     stabilization: {
-                        iterations: 1500,
-                        fit: true,
-                        updateInterval: 50
+                        iterations: 2000, // More iterations for better layout
+                        fit: true
                     },
                     repulsion: {
-                        nodeDistance: 300,
+                        nodeDistance: 200, // Increased distance to prevent overlapping
                         centralGravity: 0.1,
-                        springLength: 300,
-                        springConstant: 0.05
+                        springLength: 250,
+                        springConstant: 0.01
                     },
                     solver: 'repulsion',
-                    timestep: 0.3,
+                    timestep: 0.1, // Slower physics for smoother stabilization
                     adaptiveTimestep: true
                 },
                 interaction: {
@@ -425,30 +403,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     multiselect: true,
                     hoverConnectedEdges: true,
                     selectConnectedEdges: true,
-                    zoomView: true,
-                    dragNodes: true
+                    dragNodes: true // Enable dragging
                 },
                 layout: {
                     improvedLayout: true,
                     hierarchical: {
-                        enabled: true,
-                        direction: 'LR',
-                        sortMethod: 'directed',
-                        nodeSpacing: 250,
-                        treeSpacing: 350,
-                        blockShifting: true,
-                        edgeMinimization: true,
-                        parentCentralization: true
+                        enabled: false
                     }
                 },
                 animation: {
-                    duration: 1000,
+                    duration: 1000, // Smooth animations
                     easingFunction: 'easeInOutQuad'
                 }
             };
             
             // Create network for optimal path
             var pathContainer = document.getElementById('network');
+            var pathNetwork;
             if (pathContainer) {
                 console.log('Creating path network with data:', { nodes: pathNodes, edges: pathEdges });
                 console.log('Path network options:', pathOptions);
@@ -456,256 +427,123 @@ document.addEventListener('DOMContentLoaded', function() {
                     nodes: pathNodes,
                     edges: pathEdges
                 };
-                var pathNetwork = new vis.Network(pathContainer, pathData, pathOptions);
+                pathNetwork = new vis.Network(pathContainer, pathData, pathOptions);
+                
+                // Disable physics after stabilization to prevent movement but keep dragging
+                pathNetwork.once("stabilizationIterationsDone", function() {
+                    pathNetwork.setOptions({ 
+                        physics: false,
+                        interaction: {
+                            dragNodes: true // Keep dragging enabled
+                        }
+                    });
+                });
+                
+                // Add smooth hover animations
+                pathNetwork.on("hoverNode", function (params) {
+                    // Scale up node on hover with animation
+                    pathNetwork.body.data.nodes.update({
+                        id: params.node,
+                        size: 55
+                    });
+                });
+                
+                pathNetwork.on("blurNode", function (params) {
+                    // Return to normal size when not hovering
+                    pathNetwork.body.data.nodes.update({
+                        id: params.node,
+                        size: 45
+                    });
+                });
+                
                 console.log('Path network created successfully');
             }
             
-            // Highlight path in full network
-            // Create network for full career graph
-            var allNodes = new vis.DataSet([]);
-            var allEdges = new vis.DataSet([]);
-            
-            // Add all nodes
-            for (var nodeId in graph.nodes) {
-                if (graph.nodes.hasOwnProperty(nodeId)) {
-                    var node = graph.nodes[nodeId];
-                    allNodes.add({
+            // Also highlight the path in the full network with YELLOW highlighting and glow effects
+            if (typeof fullNetwork !== 'undefined') {
+                // Highlight path nodes in full network with yellow color and glow
+                for (var i = 0; i < pathResult.path.length; i++) {
+                    var nodeId = pathResult.path[i];
+                    fullNetwork.body.data.nodes.update({
                         id: nodeId,
-                        label: node.name,
-                        title: getNodeTitle(node.name, node.type),
-                        color: getEnhancedNodeColor(node.type),
-                        shape: getNodeShape(node.type),
-                        font: { 
-                            color: '#000', 
-                            size: 14, 
-                            face: 'Segoe UI, Arial, sans-serif',
-                            strokeWidth: 2,
-                            strokeColor: '#fff'
+                        color: {
+                            background: '#FFD700', // Yellow background
+                            border: '#FFD700', // Yellow border
+                            highlight: {
+                                background: '#FFD700',
+                                border: '#FFD700'
+                            }
                         },
-                        borderWidth: 2,
-                        size: 30,
+                        size: 50, // Same size as regular nodes to maintain consistency
+                        font: { 
+                            color: '#000000', // Black text for better contrast on yellow
+                            size: 12, // Show internal labels
+                            bold: true,
+                            strokeWidth: 0,
+                            multi: 'html' // Allow multi-line text
+                        },
+                        borderWidth: 4,
                         shadow: {
                             enabled: true,
-                            color: 'rgba(0,0,0,0.2)',
-                            size: 6,
-                            x: 2,
-                            y: 2
+                            color: 'rgba(255, 215, 0, 0.5)', // Yellow glow
+                            size: 15,
+                            x: 5,
+                            y: 5
+                        },
+                        labelHighlightBold: true,
+                        chosen: {
+                            node: function(values, id, selected, hovering) {
+                                // Custom function to ensure labels stay inside nodes
+                                values.label = values.label || '';
+                            }
                         }
                     });
                 }
-            }
-            
-            // Add all edges
-            for (var i = 0; i < graph.edges.length; i++) {
-                var edge = graph.edges[i];
-                var fromNode = graph.nodes[edge.from];
-                var toNode = graph.nodes[edge.to];
-                allEdges.add({
-                    from: edge.from,
-                    to: edge.to,
-                    arrows: {
-                        to: {
-                            enabled: true,
-                            type: 'arrow',
-                            scaleFactor: 0.8
-                        }
-                    },
-                    color: { 
-                        color: 'rgba(52, 152, 219, 0.4)',
-                        highlight: 'rgba(41, 128, 185, 0.8)'
-                    },
-                    width: 2,
-                    title: '<div style="font-size: 14px; font-weight: bold; color: #2c3e50; padding: 3px;">Transition</div><div style="color: #34495e; padding: 2px;">From: ' + fromNode.name + '</div><div style="color: #34495e; padding: 2px;">To: ' + toNode.name + '</div>',
-                    font: { 
-                        color: '#2c3e50', 
-                        size: 12, 
-                        face: 'Segoe UI, Arial, sans-serif',
-                        strokeWidth: 1,
-                        strokeColor: '#fff'
-                    },
-                    smooth: { type: 'dynamic' },
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(52, 152, 219, 0.2)',
-                        size: 3,
-                        x: 1,
-                        y: 1
-                    }
-                });
-            }
-            
-            // Highlight path nodes in full network
-            for (var i = 0; i < pathResult.path.length; i++) {
-                var nodeId = pathResult.path[i];
-                var node = graph.nodes[nodeId];
-                allNodes.update({
-                    id: nodeId,
-                    color: getEnhancedNodeColor(node.type),
-                    size: 60,
-                    font: { 
-                        color: '#000', 
-                        size: 20, 
-                        bold: true,
-                        strokeWidth: 4,
-                        strokeColor: '#fff'
-                    },
-                    borderWidth: 6,
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(231, 76, 60, 0.9)',
-                        size: 25,
-                        x: 6,
-                        y: 6
-                    }
-                });
-            }
-            
-            // Highlight path edges in full network
-            for (var i = 0; i < pathResult.path.length - 1; i++) {
-                var from = pathResult.path[i];
-                var to = pathResult.path[i + 1];
                 
-                // Find the edge in allEdges
-                for (var j = 0; j < graph.edges.length; j++) {
-                    var edge = graph.edges[j];
-                    if (edge.from === from && edge.to === to) {
-                        allEdges.update({
+                // Highlight path edges in full network with glow effect
+                for (var i = 0; i < graph.edges.length; i++) {
+                    var edge = graph.edges[i];
+                    // Check if this edge is part of the path
+                    var isPathEdge = false;
+                    for (var j = 0; j < pathResult.path.length - 1; j++) {
+                        if (edge.from === pathResult.path[j] && edge.to === pathResult.path[j + 1]) {
+                            isPathEdge = true;
+                            break;
+                        }
+                    }
+                    
+                    if (isPathEdge) {
+                        // Create a unique ID for the edge
+                        var edgeId = edge.from + "_" + edge.to;
+                        fullNetwork.body.data.edges.update({
+                            id: edgeId,
                             from: edge.from,
                             to: edge.to,
                             color: {
-                                color: 'rgba(231, 76, 60, 0.9)',
-                                highlight: 'rgba(192, 57, 43, 1)'
+                                color: '#FFD700', // Yellow for path edges
+                                highlight: '#FFD700'
                             },
-                            width: 8,
+                            width: 6, // Consistent width
                             arrows: {
                                 to: {
                                     enabled: true,
                                     type: 'arrow',
-                                    scaleFactor: 1.2
+                                    scaleFactor: 1.5
                                 }
                             },
-                            smooth: { type: 'dynamic', roundness: 0.5 },
                             shadow: {
                                 enabled: true,
-                                color: 'rgba(231, 76, 60, 0.5)',
+                                color: 'rgba(255, 215, 0, 0.7)', // Yellow glow
                                 size: 10,
                                 x: 3,
                                 y: 3
+                            },
+                            font: {
+                                color: '#000000' // Black text for all edges
                             }
                         });
-                        break;
                     }
                 }
-            }
-            
-            // Network options for full network
-            var fullOptions = {
-                nodes: {
-                    shape: 'dot',
-                    size: 30,
-                    font: {
-                        size: 14,
-                        face: 'Segoe UI, Arial, sans-serif',
-                        color: '#000',
-                        bold: true,
-                        strokeWidth: 2,
-                        strokeColor: '#fff'
-                    },
-                    borderWidth: 2,
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(0,0,0,0.3)',
-                        size: 8,
-                        x: 3,
-                        y: 3
-                    },
-                    scaling: {
-                        min: 15,
-                        max: 40
-                    }
-                },
-                edges: {
-                    width: 2,
-                    arrows: {
-                        to: { 
-                            enabled: true, 
-                            scaleFactor: 1.0,
-                            type: 'arrow'
-                        }
-                    },
-                    smooth: {
-                        type: 'dynamic'
-                    },
-                    shadow: {
-                        enabled: true,
-                        color: 'rgba(0,0,0,0.2)',
-                        size: 4,
-                        x: 1,
-                        y: 1
-                    },
-                    color: {
-                        color: 'rgba(52, 152, 219, 0.4)',
-                        highlight: 'rgba(41, 128, 185, 0.8)'
-                    }
-                },
-                physics: {
-                    enabled: true,
-                    stabilization: {
-                        iterations: 2000,
-                        fit: true,
-                        updateInterval: 50
-                    },
-                    repulsion: {
-                        nodeDistance: 250,
-                        centralGravity: 0.1,
-                        springLength: 250,
-                        springConstant: 0.05
-                    },
-                    solver: 'repulsion',
-                    timestep: 0.3,
-                    adaptiveTimestep: true
-                },
-                interaction: {
-                    hover: true,
-                    tooltipDelay: 200,
-                    navigationButtons: true,
-                    keyboard: true,
-                    multiselect: true,
-                    hoverConnectedEdges: true,
-                    selectConnectedEdges: true,
-                    zoomView: true,
-                    dragNodes: true
-                },
-                layout: {
-                    improvedLayout: true,
-                    hierarchical: {
-                        enabled: true,
-                        direction: 'LR',
-                        sortMethod: 'directed',
-                        nodeSpacing: 200,
-                        treeSpacing: 300,
-                        blockShifting: true,
-                        edgeMinimization: true,
-                        parentCentralization: true
-                    }
-                },
-                animation: {
-                    duration: 1000,
-                    easingFunction: 'easeInOutQuad'
-                }
-            };
-            
-            // Create network for full career graph
-            var fullContainer = document.getElementById('fullNetwork');
-            if (fullContainer) {
-                console.log('Creating full network with data:', { nodes: allNodes, edges: allEdges });
-                console.log('Full network options:', fullOptions);
-                var fullData = {
-                    nodes: allNodes,
-                    edges: allEdges
-                };
-                var fullNetwork = new vis.Network(fullContainer, fullData, fullOptions);
-                console.log('Full network created successfully');
             }
         }
     } catch (error) {

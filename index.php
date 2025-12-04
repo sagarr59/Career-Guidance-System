@@ -376,30 +376,25 @@ body {
     </div>
     
     <div class="row g-4 mb-5">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="stat-card-modern p-4 text-center">
                 <div class="stat-number"><?= $careers_count ?></div>
                 <div class="stat-label">Career Options</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="stat-card-modern p-4 text-center">
                 <div class="stat-number"><?= $skills_count ?></div>
                 <div class="stat-label">Key Skills</div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="stat-card-modern p-4 text-center">
                 <div class="stat-number"><?= $users_count ?></div>
                 <div class="stat-label">Students Guided</div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stat-card-modern p-4 text-center">
-                <div class="stat-number"><?= $matches_count ?></div>
-                <div class="stat-label">Matches Made</div>
-            </div>
-        </div>
+        <!-- Removed the "Matches Made" section as requested -->
     </div>
     
     <div class="row mb-5">

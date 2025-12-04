@@ -490,7 +490,16 @@ $startOptions = [
                     
                         <div class="col-12">
                             <h5 class="mb-4">Path Visualization</h5>
-                            <div id="network" style="width: 100%; height: 400px; border: 1px solid #ddd; border-radius: 5px;"></div>
+                            <div id="network" style="width: 100%; height: 400px; border: 1px solid #ddd; border-radius: 5px;">
+                                <div class="d-flex justify-content-center align-items-center h-100">
+                                    <div class="text-center">
+                                        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <p class="mt-3 fw-bold">Generating Optimal Path Visualization...</p>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="network-info mt-3">
                                 <h6 class="mb-2"><i class="fas fa-key me-1"></i> Legend</h6>
                                 <div class="network-legend">
@@ -524,7 +533,16 @@ $startOptions = [
                     <i class="fas fa-sitemap me-2"></i>Complete Career Network
                 </div>
                 <div class="card-body">
-                    <div id="fullNetwork" style="width: 100%; height: 600px; border: 1px solid #ddd; border-radius: 5px;"></div>
+                    <div id="fullNetwork" style="width: 100%; height: 600px; border: 1px solid #ddd; border-radius: 5px;">
+                        <div class="d-flex justify-content-center align-items-center h-100">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-3 fw-bold">Generating Career Network Visualization...</p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="network-info mt-3">
                         <h6 class="mb-2"><i class="fas fa-key me-1"></i> Legend</h6>
                         <div class="network-legend">

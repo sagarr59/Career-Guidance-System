@@ -1,5 +1,75 @@
 /* Custom styles for Career Guidance System */
 
+/* Career Path Visualization Styles */
+.network-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+}
+
+.network-info {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+/* Enhanced network container styling */
+#network, #fullNetwork {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+#network:hover, #fullNetwork:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Node hover effects */
+.vis-network .node {
+    transition: transform 0.3s ease;
+}
+
+.vis-network .node:hover {
+    transform: scale(1.1);
+}
+
+/* Glow effect for highlighted path nodes */
+.vis-network .node.highlight {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+/* Glow effect for highlighted path edges */
+.vis-network .edge.highlight {
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.7));
+}
+
+/* Glow animation */
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+    
+    to {
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    }
+}
+
 /* Interest Survey Styles */
 .interest-container {
     max-width: 800px;

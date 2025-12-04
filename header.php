@@ -304,7 +304,6 @@ if (session_status() === PHP_SESSION_NONE) {
           <li class="nav-item"><a class="nav-link <?= basename($_SERVER['PHP_SELF'])=='userprofile.php'?'active':'' ?>" href="userprofile.php"><i class="fas fa-user me-1"></i>Profile</a></li>
           <li class="nav-item"><a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt me-1"></i>Logout</a></li>
         <?php else: ?>
-          <li class="nav-item"><a class="nav-link <?= basename($_SERVER['PHP_SELF'])=='career_explorer.php'?'active':'' ?>" href="career_explorer.php"><i class="fas fa-compass me-1"></i>Career Explorer</a></li>
           <li class="nav-item"><a class="nav-link <?= basename($_SERVER['PHP_SELF'])=='career_assessment.php'?'active':'' ?>" href="career_assessment.php"><i class="fas fa-clipboard-list me-1"></i>Career Assessment</a></li>
           <li class="nav-item"><a class="nav-link <?= basename($_SERVER['PHP_SELF'])=='info.php'?'active':'' ?>" href="info.php"><i class="fas fa-info-circle me-1"></i>Info</a></li>
           <li class="nav-item"><a class="nav-link <?= basename($_SERVER['PHP_SELF'])=='login.php'?'active':'' ?>" href="login.php"><i class="fas fa-sign-in-alt me-1"></i>Login</a></li>
