@@ -348,7 +348,9 @@ body {
     <div class="container">
         <div class="hero-content">
             <h1 class="hero-title">Discover Your Perfect Career Path</h1>
-            <p class="hero-subtitle">Personalized career guidance for Nepali students based on your unique skills, interests, and personality traits</p>
+            <p class="hero-subtitle">
+                <span id="typed-text"></span>
+            </p>
             <div class="mt-4">
                 <?php if(!isset($_SESSION['student_id'])): ?>
                     <a href="register.php" class="btn btn-modern btn-modern-success">
@@ -483,5 +485,6 @@ body {
         </a>
     </div>
 </div>
+
 
 <?php include 'footer.php'; ?>
