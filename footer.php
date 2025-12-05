@@ -38,30 +38,7 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Initialize Typed.js for homepage -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Check if we're on the homepage and the typed-text element exists
-  var typedTextElement = document.getElementById('typed-text');
-  if (typedTextElement) {
-    var typed = new Typed('#typed-text', {
-      strings: [
-        'Personalized career guidance for Nepali students based on your unique skills, interests, and personality traits',
-        'Explore career options tailored to your strengths',
-        'Find the perfect educational pathway for your future',
-        'Unlock your potential with data-driven insights'
-      ],
-      typeSpeed: 50,
-      backSpeed: 30,
-      backDelay: 2000,
-      loop: true,
-      showCursor: true,
-      cursorChar: '|',
-      autoInsertCss: true
-    });
-  }
-});
-</script>
+
 
 </body>
 </html>

@@ -22,9 +22,6 @@ if (session_status() === PHP_SESSION_NONE) {
   <!-- Custom CSS -->
   <link href="assets/css/style.css" rel="stylesheet">
   
-  <!-- Typed.js Library -->
-  <script src="assets/js/typed.min.js"></script>
-  
   <style>
     :root {
       --primary-color: #2c3e50;

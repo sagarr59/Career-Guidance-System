@@ -1,10 +1,7 @@
 <?php
 /**
  * Skill Gap Analysis Algorithm
- * 
- * This algorithm analyzes the gap between a user's current skills and the skills
- * required for a specific career path, providing personalized recommendations
- * for skill development.
+
  */
 
 /**
